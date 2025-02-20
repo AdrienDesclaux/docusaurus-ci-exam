@@ -17,7 +17,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # Étape d'activation de Pages
       - name: Enable Pages
         run: |
           curl -X POST \
@@ -36,6 +35,15 @@ jobs:
 
       - name: Build website
         run: npm run build
+
+      - name: Check if build succeeded
+        run: |
+          if [ -d "build" ] && [ -n "$(ls -A build 2>/dev/null)" ]; then
+            echo "✅ Build completed successfully."
+          else
+            echo "❌ Build failed. Exiting..."
+            exit 1
+          fi
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
