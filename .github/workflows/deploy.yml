@@ -6,7 +6,7 @@ on:
       - main
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -16,7 +16,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      # Étape d'activation de Pages
+      - name: Enable Pages
+        run: |
+          curl -X POST \
+          -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          -H "Accept: application/vnd.github.v3+json" \
+          https://api.github.com/repos/${{ github.repository }}/pages \
+          -d '{"source":{"branch":"gh-pages","path":"/"}}'
+
       - uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+          cache: npm
 
       - name: Install dependencies
         run: npm install
