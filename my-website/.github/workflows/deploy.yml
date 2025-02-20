@@ -22,7 +22,7 @@ jobs:
         run: npm ci
 
       - name: Build website
-        run: docusaurus build
+        run: npm run build
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
